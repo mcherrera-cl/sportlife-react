@@ -1,0 +1,21 @@
+.form {
+    background-color: beige;
+    padding: 2em 1.2em;
+    position: relative;
+}
+
+.formLogo {
+    position: absolute;
+    top: -15px;
+    left: 0;
+    transform: translate(0%, -50%);
+    margin: auto;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .form {
+        border-radius: 8px;
+        border: 6px solid rgb(241, 185, 63);
+    }
+}

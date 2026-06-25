@@ -1,68 +1,57 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    --navbar-gradient: linear-gradient(
+    90deg,
+    #1e1033,
+    #2e1065,
+    #6d28d9
+  );
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+body.login {
+  background: linear-gradient(135deg, rgba(40, 10, 60, 0.55), rgba(10, 5, 20, 0.75)), url('https://cdn.pixabay.com/photo/2025/04/20/18/36/exercise-9546022_1280.png') no-repeat center left;
+  background-size: auto, auto;
+  background-size: contain;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.welcome-title {
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: .05em;
+
+  text-shadow:
+
+    /* CONTORNO MORADO */
+    -2px -2px 0 #2e1065,
+     0px -2px 0 #2e1065,
+     2px -2px 0 #2e1065,
+
+    -2px  0px 0 #2e1065,
+     2px  0px 0 #2e1065,
+
+    -2px  2px 0 #2e1065,
+     0px  2px 0 #2e1065,
+     2px  2px 0 #2e1065,
+
+    -4px -4px 0 rgba(255,188,33,.9),
+     0px -4px 0 rgba(255,188,33,.9),
+     4px -4px 0 rgba(255,188,33,.9),
+
+    -4px  0px 0 rgba(255,188,33,.9),
+     4px  0px 0 rgba(255,188,33,.9),
+
+    -4px  4px 0 rgba(255,188,33,.9),
+     0px  4px 0 rgba(255,188,33,.9),
+     4px  4px 0 rgba(255,188,33,.9),
+    0 0 8px rgba(255,188,33,.7),
+    0 0 16px rgba(255,188,33,.4),
+
+    0 0 6px rgba(255,255,255,.8),
+
+    0 8px 12px rgba(0,0,0,.25),
+    5px 4px 20px #2e1065;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+footer {
+  background: var(--navbar-gradient);
 }
