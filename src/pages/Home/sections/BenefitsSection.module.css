@@ -1,0 +1,63 @@
+.benefitsSlider {
+  position: relative;
+  padding: 2.5em 0;
+  -webkit-mask-image: linear-gradient(to right,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent);
+
+  mask-image: linear-gradient(to right,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent);
+}
+
+.benefitsTrack {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: max-content;
+
+  animation: benefits-scroll 25s linear infinite;
+}
+
+.benefitItem {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  padding: 1rem 1.5rem;
+
+  white-space: nowrap;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, .75);
+
+  border: 1px solid rgba(109, 40, 217, .15);
+
+  backdrop-filter: blur(8px);
+
+  transition: all .3s ease;
+}
+
+
+@keyframes benefits-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media(hover:hover) {
+  .benefitItem:hover {
+    border-color: var(--primary);
+    box-shadow:
+      0 8px 25px rgba(109, 40, 217, .15);
+  }
+}
