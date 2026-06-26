@@ -14,6 +14,30 @@ body.login {
   background-size: contain;
 }
 
+body.register {
+  background:
+    linear-gradient(
+      rgba(45, 20, 75, .55),
+      rgba(45, 20, 75, .55)
+    ),
+
+    linear-gradient(
+      to right,
+      transparent 0%,
+      transparent 60%,
+      rgba(141, 119, 181, .25) 75%,
+      rgba(141, 119, 181, .75) 90%,
+      #8d77b5 100%
+    ),
+
+    url('https://mcherrera.dev/sportlife-login-funcional/assets/images/register-bg.webp');
+
+  background-color: #58417c;
+
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40% auto;
+}
 
 .carousel-img-wrapper {
   width: 100%;

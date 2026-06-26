@@ -1,0 +1,7 @@
+.registerWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 75vh;
+    padding: 8em 0 4em 0;
+}

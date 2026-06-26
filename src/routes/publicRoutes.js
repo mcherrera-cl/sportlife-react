@@ -1,7 +1,7 @@
 import React from "react";
 import HomePage from "../pages/Home";
 import LoginPage from "../pages/auth/Login";
-import RegisterPage from "../pages/RegisterPage";
+import RegisterPage from "../pages/auth/Register";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import MainLayout from "../layouts/MainLayout";
 
