@@ -30,14 +30,17 @@ body.register {
       #8d77b5 100%
     ),
 
-    url('https://mcherrera.dev/sportlife-login-funcional/assets/images/register-bg.webp');
+    url('/registro.webp');
 
   background-color: #58417c;
 
   background-repeat: no-repeat;
-  background-position: left center;
-  background-size: 40% auto;
+  background-position: right;
+  background-size: contain;
+  border-radius: 20px;
+  overflow: auto;
 }
+
 
 .carousel-img-wrapper {
   width: 100%;

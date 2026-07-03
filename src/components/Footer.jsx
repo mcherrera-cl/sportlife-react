@@ -1,5 +1,4 @@
 import React from "react";
-
 export default () => {
   return (
     <footer className="bg-dark text-light pt-4 pb-3" id="contacto">

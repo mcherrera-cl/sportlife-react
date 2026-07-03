@@ -2,7 +2,12 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import logo from "@assets/logo.webp";
 import styles from "./RegisterForm.module.css";
 import { useState } from "react";
-import { validarEmail } from "@utils/validaciones";
+import {
+  validarEmail,
+  validarNombre,
+  validarFechaNacimiento,
+  validarCoincidenciasPassword
+} from "@utils/validaciones";
 
 export default () => {
   const [formData, setFormData] = useState({
@@ -16,7 +21,10 @@ export default () => {
     actividad: "",
   });
 
+  const nombreValido = validarNombre(formData.nombre);
   const emailValido = validarEmail(formData.correo);
+  const fechaValida = validarFechaNacimiento(formData.nacimiento);
+  const passwordCoinciden = validarCoincidenciasPassword(formData.password1, formData.password2);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +34,7 @@ export default () => {
       [name]: value,
     }));
 
-    console.log(formData.correo)
+    console.log(formData.correo);
   };
 
   const handleOnSubmit = (e) => {
@@ -47,13 +55,20 @@ export default () => {
           placeholder="Ingresa tu nombre"
           value={formData.nombre}
           onChange={handleOnChange}
+          className={
+            formData.nombre === ""
+              ? ""
+              : nombreValido
+                ? "is-valid"
+                : "is-invalid"
+          }
         />
         <Form.Control.Feedback type="valid">
-          Un nombre válido debe contener al menos 3 caracteres y no incluir
-          números. Por ejemplo: Juan Pérez
+          Formato válido
         </Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">
-          Nombre inválido
+          Nombre inválido, un nombre válido debe contener al menos 2 caracteres
+          y no incluir números y símbolos extraños. Por ejemplo: Juan Pérez
         </Form.Control.Feedback>
       </Form.Group>
 
@@ -68,30 +83,47 @@ export default () => {
           required
           onChange={handleOnChange}
           className={
-            formData.correo === "" ? "" : emailValido ? "is-valid" : "is-invalid"
+            formData.correo === ""
+              ? ""
+              : emailValido
+                ? "is-valid"
+                : "is-invalid"
           }
         />
         <Form.Control.Feedback type="valid">
-          Correo electrónico válido con el formato
-          usuario@dominio.com
+          Formato válido
         </Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">
-          Correo con formato inválido
+          Correo con formato inválido, un correo electrónico válido es con
+          formato usuario@dominio.cl
         </Form.Control.Feedback>
       </Form.Group>
 
       {/* Fecha de nacimiento */}
       <Form.Group className="mb-3">
         <Form.Label htmlFor="nacimiento">Fecha de nacimiento</Form.Label>
-        <Form.Control type="date" id="nacimiento" name="nacimiento" />
-        <Form.Control.Feedback type="valid">
-          Este campo es OPCIONAL
-        </Form.Control.Feedback>
+
+        <Form.Control
+          type="date"
+          id="nacimiento"
+          name="nacimiento"
+          value={formData.nacimiento}
+          onChange={handleOnChange}
+          className={
+            formData.nacimiento === ""
+              ? ""
+              : fechaValida
+                ? "is-valid"
+                : "is-invalid"
+          }
+        />
+
+        <Form.Control.Feedback type="valid">Fecha válida</Form.Control.Feedback>
+
         <Form.Control.Feedback type="invalid">
-          Fecha inválida
+          Fecha inválida. Debes tener entre 10 y 100 años
         </Form.Control.Feedback>
       </Form.Group>
-
       {/* Contraseña */}
       <Form.Group className="mb-3">
         <Form.Label htmlFor="contrasenia1">Contraseña</Form.Label>
@@ -110,7 +142,6 @@ export default () => {
           El password no es válido
         </Form.Control.Feedback>
       </Form.Group>
-
       {/* Confirmar contraseña */}
       <Form.Group className="mb-3">
         <Form.Label htmlFor="contrasenia2">Confirmar contraseña</Form.Label>
@@ -120,12 +151,15 @@ export default () => {
           name="password2"
           onChange={handleOnChange}
           placeholder="Confirma tu contraseña"
+          className={
+            formData.password2 === "" ? "" : passwordCoinciden ? "is-valid" : "is-invalid"
+          }
         />
         <Form.Control.Feedback type="valid">
-          Debe coincidir exactamente con la contraseña ingresada anteriormente.
+          Es válido
         </Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">
-          Las contraseñas no coinciden
+          Las contraseñas no coinciden. Debe coincidir exactamente con la contraseña ingresada anteriormente.
         </Form.Control.Feedback>
       </Form.Group>
 
