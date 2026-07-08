@@ -3,7 +3,7 @@ const API_BASE_URL =
 
 export const request = async (
   endpoint,
-  { requiereAuth = false, headers = {}, ...options } = {}
+  { requiereAuth = false, headers = {}, ...options } = {},
 ) => {
   const token = localStorage.getItem("token");
 
@@ -11,9 +11,7 @@ export const request = async (
     ...options,
     headers: {
       "Content-Type": "application/json",
-      ...(requiereAuth && token
-        ? { Authorization: `Bearer ${token}` }
-        : {}),
+      ...(requiereAuth && token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
   });

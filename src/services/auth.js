@@ -24,6 +24,8 @@ export function crearUsuario(payload) {
 
 export function actualizarPerfil(payload) {
     return request("/auth/me", {
-      method: "PUT"
+      method: "PUT",
+      requiereAuth: true,
+      body: JSON.stringify(payload)
     })
 }

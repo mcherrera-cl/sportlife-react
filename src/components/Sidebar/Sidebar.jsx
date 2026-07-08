@@ -55,17 +55,18 @@ export default function Sidebar() {
 
               {section.items.map(item => (
 
-                <Nav.Link
-                  key={item.path}
-                  as={NavLink}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `${styles.link} ${isActive ? styles.active : ""}`
-                  }
-                >
-                  {item.label}
-                </Nav.Link>
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end
+                className={({ isActive }) =>
+                  `${styles.link} ${isActive ? styles.active : ""}`
+                }
+              >
+                {item.label}
+              </NavLink>
 
+              
               ))}
 
             </Nav>

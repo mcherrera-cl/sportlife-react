@@ -44,23 +44,57 @@
     background:rgba(255,255,255,.08);
 }
 
-
-.link{
-    color:rgba(255,255,255,.85)!important;
-    padding:.6rem .9rem!important;
-    border-radius:.5rem;
-    margin:.15rem 0;
-    transition:.2s;
+.link {
+    position: relative;
+    display: block;
+    color: rgba(255,255,255,.85);
+    text-decoration: none;
+    padding: .6rem .9rem;
+    margin: .15rem 0;
+    border-radius: .5rem;
+    transition: 
+        background .25s ease,
+        color .25s ease;
 }
 
-.link:hover{
+.link:hover {
     background:rgba(255,255,255,.08);
-    color:white!important;
+    color:white;
 }
 
-.active{
-    background:rgba(255,255,255,.18);
-    color:white!important;
+
+/* activo */
+.active {
+    color:white;
     font-weight:600;
-    border: 1px solid red !important;
+    background:rgba(255,255,255,.08);
+}
+
+/* indicador lateral */
+.active::before {
+    content:"";
+    position:absolute;
+    left:0;
+    top:25%;
+    height:50%;
+    width:3px;
+    border-radius:10px;
+    background: yellow;
+
+    animation: activeIndicator .25s ease-out;
+}
+
+
+@keyframes activeIndicator {
+
+    from {
+        height:0;
+        opacity:0;
+    }
+
+    to {
+        height:50%;
+        opacity:1;
+    }
+
 }

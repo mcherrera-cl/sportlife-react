@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { validarEmail } from "@utils/validaciones";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "@services/auth";
-import { saveAuth } from "../../../services/authStorage";
+import { saveAuth } from "@services/authStorage";
+import { useAuth } from "@context/AuthContext"
 
 import styles from "./LoginPage.module.css";
 import logo from "@assets/logo.webp";
@@ -15,6 +16,7 @@ export default () => {
   const [errorLogin, setErrorLogin] = useState("");
 
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const emailValido = validarEmail(email);
   const passwordValido = password.trim().length >= 8;
@@ -29,6 +31,7 @@ export default () => {
       const { ok, data } = await login(email, password);
       if (ok) {
         saveAuth(data.token, data.user);
+        setUser(data.user);
         navigate("/dashboard", {
           state: {
             successMessage: {

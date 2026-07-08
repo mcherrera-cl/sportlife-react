@@ -15,11 +15,31 @@ const menu = [
             {
                 label: "Perfil",
                 path: "/dashboard/profile"
+            },
+            {
+                label: "Configuración",
+                path: "/dashboard/settings"
             }
+
 
         ]
     },
 
+    {
+        title: "Reservas",
+
+        roles: ["USER"],
+        items: [
+            {
+                label: "Mis Reservas",
+                path: "/dashboard/reservations"
+            },
+            {
+                label: "Nueva Reserva",
+                path: "/dashboard/reservations/new"
+            }
+        ]
+    },
     {
         title: "Gestión",
 
@@ -29,7 +49,7 @@ const menu = [
 
             {
                 label: "Usuarios",
-                path: "/users"
+                path: "/dashboard/users"
             },
 
             {
@@ -51,17 +71,6 @@ const menu = [
                 label: "Roles",
                 path: "/roles"
             },
-
-            {
-                label: "Permisos",
-                path: "/permissions"
-            },
-
-            {
-                label: "Configuración",
-                path: "/settings"
-            }
-
         ]
     }
 
