@@ -9,7 +9,7 @@ export function validarNombre(valor) {
     .trim()
     .replace(/\s+/g, " ");
 
-  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,}$/;
+  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]{2,}$/;
 
   return regex.test(nombre);
 }
@@ -32,6 +32,12 @@ function validarPassword(input) {
   return esValido;
 }
 
+// Validaciones sobre campos de password
+// 1. Longitud del password
+export function validarLongitudPassword(pass) {
+  return pass.length >= 8;
+}
+// 2. Que los password coincidan (al momento de crear cuenta)
 export function validarCoincidenciasPassword(pass1, pass2) {
   return pass1 === pass2;
 }

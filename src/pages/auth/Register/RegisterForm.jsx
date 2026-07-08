@@ -6,10 +6,16 @@ import {
   validarEmail,
   validarNombre,
   validarFechaNacimiento,
-  validarCoincidenciasPassword
+  validarCoincidenciasPassword,
+  validarLongitudPassword,
 } from "@utils/validaciones";
+import { register } from "@services/auth";
+import { useNavigate } from "react-router-dom";
+import { successAlert } from "../../../utils/alerts";
 
 export default () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nombre: "",
     correo: "",
@@ -24,7 +30,23 @@ export default () => {
   const nombreValido = validarNombre(formData.nombre);
   const emailValido = validarEmail(formData.correo);
   const fechaValida = validarFechaNacimiento(formData.nacimiento);
-  const passwordCoinciden = validarCoincidenciasPassword(formData.password1, formData.password2);
+  const passwordValido = validarLongitudPassword(formData.password1);
+  const passwordCoinciden = validarCoincidenciasPassword(
+    formData.password1,
+    formData.password2,
+  );
+
+  // Aparte de la validación del onChange en el campo de fecha,
+  // le añadimos otra capa para restringir el rango a seleccionar (min 100, max 10) de forma dinámica
+  const h = new Date();
+
+  const min = new Date(h.getFullYear() - 100, h.getMonth(), h.getDate())
+    .toISOString()
+    .split("T")[0];
+
+  const max = new Date(h.getFullYear() - 10, h.getMonth(), h.getDate())
+    .toISOString()
+    .split("T")[0];
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -33,12 +55,43 @@ export default () => {
       ...prev,
       [name]: value,
     }));
-
-    console.log(formData.correo);
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      !nombreValido ||
+      !emailValido ||
+      !fechaValida ||
+      !passwordValido ||
+      !passwordCoinciden
+    )
+      return;
+
+    try {
+      const payload = {
+        full_name: formData.nombre.trim(),
+        email: formData.correo.trim(),
+        password: formData.password1,
+        birth_date: formData.nacimiento || null,
+        metadata: {
+          sports: [
+            {
+              name: formData.deporte,
+              frequency_per_week: Number(formData.frecuencia) || 0,
+            },
+          ],
+        },
+      };
+      await register(payload);
+
+      await successAlert("Cuenta creada", "Ahora puedes iniciar sesión");
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -107,6 +160,8 @@ export default () => {
           type="date"
           id="nacimiento"
           name="nacimiento"
+          min={min}
+          max={max}
           value={formData.nacimiento}
           onChange={handleOnChange}
           className={
@@ -132,14 +187,18 @@ export default () => {
           id="contrasenia1"
           name="password1"
           onChange={handleOnChange}
+          className={
+            formData.password1 === ""
+              ? ""
+              : passwordValido
+                ? "is-valid"
+                : "is-invalid"
+          }
           placeholder="Ingresa tu contraseña"
         />
-        <Form.Control.Feedback type="valid">
-          La contraseña debe contener al menos 8 caracteres. Se recomienda
-          combinar letras, números y símbolos.
-        </Form.Control.Feedback>
+        <Form.Control.Feedback type="valid">Es válido</Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">
-          El password no es válido
+          La contraseña debe contener al menos 8 caracteres.
         </Form.Control.Feedback>
       </Form.Group>
       {/* Confirmar contraseña */}
@@ -152,14 +211,17 @@ export default () => {
           onChange={handleOnChange}
           placeholder="Confirma tu contraseña"
           className={
-            formData.password2 === "" ? "" : passwordCoinciden ? "is-valid" : "is-invalid"
+            formData.password2 === ""
+              ? ""
+              : passwordCoinciden
+                ? "is-valid"
+                : "is-invalid"
           }
         />
-        <Form.Control.Feedback type="valid">
-          Es válido
-        </Form.Control.Feedback>
+        <Form.Control.Feedback type="valid">Es válido</Form.Control.Feedback>
         <Form.Control.Feedback type="invalid">
-          Las contraseñas no coinciden. Debe coincidir exactamente con la contraseña ingresada anteriormente.
+          Las contraseñas no coinciden. Debe coincidir exactamente con la
+          contraseña ingresada anteriormente.
         </Form.Control.Feedback>
       </Form.Group>
 
@@ -173,7 +235,13 @@ export default () => {
           <Form.Group className="mb-3">
             <Form.Label htmlFor="deporte">¿Practicas algún deporte?</Form.Label>
 
-            <Form.Select id="deporte" name="deporte" defaultValue="">
+            <Form.Select
+              id="deporte"
+              name="deporte"
+              value={formData.deporte}
+              onChange={handleOnChange}
+              defaultValue=""
+            >
               <option value="" disabled>
                 Selecciona un deporte
               </option>
@@ -200,6 +268,8 @@ export default () => {
               id="frecuencia"
               name="frecuencia"
               min={0}
+              value={formData.frecuencia}
+              onChange={handleOnChange}
               defaultValue={0}
             />
           </Form.Group>
@@ -207,7 +277,7 @@ export default () => {
       </Row>
 
       {/* Actividad */}
-      <Form.Group className="mb-4">
+      {/* <Form.Group className="mb-4">
         <Form.Label htmlFor="actividad">
           ¿Qué tipo de actividad le interesa?
         </Form.Label>
@@ -217,7 +287,7 @@ export default () => {
           name="actividad"
           placeholder="Por ejemplo: competir"
         />
-      </Form.Group>
+      </Form.Group> */}
 
       <div className="d-grid mb-3">
         <Button variant="primary" type="submit">

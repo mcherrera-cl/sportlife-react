@@ -1,0 +1,15 @@
+.header {
+  color: white;
+}
+
+.admin {
+  background: linear-gradient(135deg, #dc3545, #8b0000);
+}
+
+.coach {
+  background: linear-gradient(135deg, #198754, #0f5132);
+}
+
+.user {
+  background: linear-gradient(135deg, #0d6efd, #084298);
+}

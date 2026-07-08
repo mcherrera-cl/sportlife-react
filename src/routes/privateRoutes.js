@@ -1,7 +1,8 @@
 import React from "react";
 import ProtectedRoute from "./protectedRoutes";
-import Dashboard from "../pages/dashboard/Dashboard";
 import DashboardLayout from "../layouts/DashboardLayout/DashboardLayout";
+import Dashboard from "../pages/dashboard/Dashboard";
+import ProfilePage from "../pages/dashboard/ProfilePage";
 
 /**
  * @typedef {import("react-router-dom").RouteObject} RouteObject
@@ -19,6 +20,10 @@ const privateRoutes = [
           {
             index: true,
             element:  React.createElement(Dashboard)
+          },
+          {
+            path: "profile",
+            element: React.createElement(ProfilePage)
           }
         ]
       }

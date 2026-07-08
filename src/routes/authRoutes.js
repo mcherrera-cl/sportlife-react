@@ -1,6 +1,6 @@
 import LoginPage from "../pages/auth/Login/LoginPage"
 import RegisterPage from "../pages/auth/RegisterPage";
-import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
+import ForgotPasswordPage from "../pages/auth/ForgotPassword";
 import React from "react"
 
 /**

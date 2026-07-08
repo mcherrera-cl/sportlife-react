@@ -1,9 +1,9 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
-import { validarEmail } from "../../../utils/validaciones";
+import { validarEmail } from "@utils/validaciones";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../../services/auth";
+import { login } from "@services/auth";
 import { saveAuth } from "../../../services/authStorage";
 
 import styles from "./LoginPage.module.css";
@@ -29,7 +29,14 @@ export default () => {
       const { ok, data } = await login(email, password);
       if (ok) {
         saveAuth(data.token, data.user);
-        navigate("/dashboard");
+        navigate("/dashboard", {
+          state: {
+            successMessage: {
+              title: "Bienvenido",
+              text: "Has iniciado sesión correctamente."
+            }
+          }
+        });
       }
     } catch (error) {
       setErrorLogin(error.message || "Credenciales incorrectas");
@@ -41,7 +48,7 @@ export default () => {
     document.body.classList.add("login");
     return () => {
       document.body.className = "";
-    }
+    };
   }, []);
 
   return (
@@ -115,7 +122,11 @@ export default () => {
 
               <Form.Text className="valid-feedback">Formato válido</Form.Text>
             </Form.Group>
-            <Button type="submit" className={styles.btnSubmit} disabled={!formularioValido}>
+            <Button
+              type="submit"
+              className={styles.btnSubmit}
+              disabled={!formularioValido}
+            >
               Ingresar
             </Button>
 

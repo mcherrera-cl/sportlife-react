@@ -8,6 +8,9 @@ export default () => {
   useEffect(() => {
     document.body.classList.add("register");
     document.title = 'Sportlife | Registro'
+    return () => {
+      document.body.className = "";
+    };
   }, [])
   return (
     <Container className={styles.registerWrapper}>

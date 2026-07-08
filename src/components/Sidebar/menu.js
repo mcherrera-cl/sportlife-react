@@ -14,7 +14,7 @@ const menu = [
 
             {
                 label: "Perfil",
-                path: "/profile"
+                path: "/dashboard/profile"
             }
 
         ]
@@ -23,7 +23,7 @@ const menu = [
     {
         title: "Gestión",
 
-        roles: ["ADMIN", "COACH"],
+        roles: ["ADMIN"],
 
         items: [
 
