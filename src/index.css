@@ -9,6 +9,7 @@
   --text-color: #000000;
   --bs-secondary-color: #6c757d;
   --bs-card-bg: #f9f9f9 !important;
+  --auth-form-bg: beige;
 }
 
 [data-bs-theme="dark"] {
@@ -21,6 +22,7 @@
 
   --bs-card-bg: #2b3035;
   --bs-secondary-color: #adb5bd;
+  --auth-form-bg: #2E2924;
 }
 
 body.dark {
@@ -28,7 +30,6 @@ body.dark {
   --text-color: #ffffff;
   --bs-secondary-color:  #adb5bd;
   --bs-card-bg: #252525;
-
 }
 
 
@@ -43,9 +44,51 @@ body {
 
 
 body.login {
-  background: linear-gradient(135deg, rgba(40, 10, 60, 0.55), rgba(10, 5, 20, 0.75)), url('https://cdn.pixabay.com/photo/2025/04/20/18/36/exercise-9546022_1280.png') no-repeat center left;
-  background-size: auto, auto;
-  background-size: contain;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+body.login::before,
+body.login::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Imagen izquierda */
+body.login::before {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(40, 10, 60, 0.55),
+            rgba(10, 5, 20, 0.75)
+        ),
+        url("https://cdn.pixabay.com/photo/2025/04/20/18/36/exercise-9546022_1280.png");
+
+    background-repeat: no-repeat;
+    background-position: left left;
+    background-size: 50%;
+}
+
+/* Imagen derecha invertida */
+body.login::after {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(40, 10, 60, 0.55),
+            rgba(10, 5, 20, 0.75)
+        ),
+        url("https://cdn.pixabay.com/photo/2025/04/20/18/36/exercise-9546022_1280.png");
+
+
+    background-repeat: no-repeat;
+    background-position: right right;
+    background-size: 50%;
+
+    transform: scaleX(-1);
 }
 
 body.register {
@@ -75,6 +118,70 @@ body.register {
   overflow: auto;
 }
 
+/* ===== SweetAlert + Bootstrap ===== */
+
+.swal-bootstrap {
+  background: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
+  border: 1px solid var(--bs-border-color);
+  border-radius: .75rem;
+}
+
+.swal-bootstrap .swal2-title,
+.swal-bootstrap .swal2-html-container {
+  color: inherit;
+}
+
+.swal-bootstrap .form-label {
+  color: inherit;
+  font-weight: 500;
+}
+
+.swal-bootstrap .form-control {
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+.swal-bootstrap .form-control::placeholder {
+  color: var(--bs-secondary-color);
+}
+
+.swal-bootstrap .form-control:focus {
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+/* Loader */
+
+.swal-bootstrap .swal2-loader {
+  border-color: var(--bs-warning) transparent var(--bs-warning) transparent;
+}
+
+/* ===== Tema oscuro ===== */
+
+body.body-dark .swal-bootstrap {
+  background: #212529 !important;
+  color: #f8f9fa !important;
+  border-color: #495057;
+}
+
+body.body-dark .swal-bootstrap .form-control {
+  background: #2b3035;
+  color: #fff;
+  border-color: #495057;
+}
+
+body.body-dark .swal-bootstrap .form-control::placeholder {
+  color: #adb5bd;
+}
+
+body.body-dark .swal-bootstrap .form-control:focus {
+  background: #2b3035;
+  color: #fff;
+  border-color: #ffc107;
+  box-shadow: 0 0 0 .25rem rgba(255,193,7,.25);
+}
 
 .carousel-img-wrapper {
   width: 100%;

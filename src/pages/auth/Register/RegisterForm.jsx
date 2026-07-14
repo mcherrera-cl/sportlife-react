@@ -1,4 +1,5 @@
 import { Form, Row, Col, Button } from "react-bootstrap";
+import ToggleTheme from "@components/ToggleTheme";
 import logo from "@assets/logo.webp";
 import styles from "./RegisterForm.module.css";
 import { useState } from "react";
@@ -11,7 +12,8 @@ import {
 } from "@utils/validaciones";
 import { register } from "@services/auth";
 import { useNavigate } from "react-router-dom";
-import { successAlert } from "../../../utils/alerts";
+import { successAlert } from "@utils/alerts";
+
 
 export default () => {
   const navigate = useNavigate();
@@ -97,7 +99,7 @@ export default () => {
   return (
     <Form className={styles.form} noValidate onSubmit={handleOnSubmit}>
       <img src={logo} alt="logo" className={styles.formLogo}></img>
-      <h2 className="text-center">Registro</h2>
+      <h2 className="text-center">Registro <ToggleTheme /></h2>
       {/* Nombre */}
       <Form.Group className="mb-3">
         <Form.Label htmlFor="nombre">Nombre</Form.Label>

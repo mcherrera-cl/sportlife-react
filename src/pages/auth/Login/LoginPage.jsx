@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "@services/auth";
 import { saveAuth } from "@services/authStorage";
 import { useAuth } from "@context/AuthContext"
+import ToggleTheme from "@components/ToggleTheme";
 
 import styles from "./LoginPage.module.css";
 import logo from "@assets/logo.webp";
@@ -66,7 +67,8 @@ export default () => {
         <Col xs={12} md={8} xl={6} xxl={5}>
           <Form className={styles.form} onSubmit={handleSubmit} noValidate>
             <img src={logo} alt="logo" className={styles.formLogo}></img>
-            <h2 className="text-center">Login</h2>
+            <h2 className="text-center">Login <ToggleTheme/></h2>
+            
             {errorLogin && (
               <div className="alert alert-danger mt-3 text-center">
                 {errorLogin}

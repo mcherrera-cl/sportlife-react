@@ -1,5 +1,5 @@
 .form {
-    background-color: beige;
+    background-color: var(--auth-form-bg, #ccc);
     padding: 2em 1.2em;
     position: relative;
 }

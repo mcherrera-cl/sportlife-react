@@ -19,6 +19,25 @@
     background:linear-gradient(180deg,#1e3a8a,#172554);
 }
 
+.icon {
+    width: 18px;
+    margin-right: .75rem;
+}
+
+/* Color del icono según rol */
+
+.admin .icon {
+    color: #f87171;
+}
+
+.coach .icon {
+    color: #4ade80;
+}
+
+.user .icon {
+    color: #60a5fa;
+}
+
 /* Secciones */
 
 .section{

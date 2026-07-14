@@ -1,79 +1,69 @@
+import {
+  faHouse,
+  faUser,
+  faGear,
+  faCalendarCheck,
+  faPlus,
+  faUsers,
+  faDoorOpen,
+} from "@fortawesome/free-solid-svg-icons";
+
 const menu = [
+  {
+    title: "General",
+    roles: ["ADMIN", "COACH", "USER"],
+    items: [
+      {
+        label: "Dashboard",
+        path: "/dashboard",
+        icon: faHouse,
+      },
+      {
+        label: "Perfil",
+        path: "/dashboard/profile",
+        icon: faUser,
+      },
+      {
+        label: "Configuración",
+        path: "/dashboard/settings",
+        icon: faGear,
+      },
+    ],
+  },
 
-    {
-        title: "General",
+  {
+    title: "Reservas",
+    roles: ["USER"],
+    items: [
+      {
+        label: "Mis Reservas",
+        path: "/dashboard/reservations",
+        icon: faCalendarCheck,
+      },
+      {
+        label: "Nueva Reserva",
+        path: "/dashboard/reservations/new",
+        icon: faPlus,
+      },
+    ],
+  },
 
-        roles: ["ADMIN", "COACH", "USER"],
-
-        items: [
-
-            {
-                label: "Dashboard",
-                path: "/dashboard"
-            },
-
-            {
-                label: "Perfil",
-                path: "/dashboard/profile"
-            },
-            {
-                label: "Configuración",
-                path: "/dashboard/settings"
-            }
-
-
-        ]
-    },
-
-    {
-        title: "Reservas",
-
-        roles: ["USER"],
-        items: [
-            {
-                label: "Mis Reservas",
-                path: "/dashboard/reservations"
-            },
-            {
-                label: "Nueva Reserva",
-                path: "/dashboard/reservations/new"
-            }
-        ]
-    },
-    {
-        title: "Gestión",
-
-        roles: ["ADMIN"],
-
-        items: [
-
-            {
-                label: "Usuarios",
-                path: "/dashboard/users"
-            },
-
-            {
-                label: "Reportes",
-                path: "/reports"
-            }
-
-        ]
-    },
-
-    {
-        title: "Administración",
-
-        roles: ["ADMIN"],
-
-        items: [
-
-            {
-                label: "Roles",
-                path: "/roles"
-            },
-        ]
-    }
-
+  {
+    title: "Gestión",
+    roles: ["ADMIN"],
+    items: [
+      {
+        label: "Usuarios",
+        path: "/dashboard/users",
+        icon: faUsers,
+      },
+      {
+        label: "Salas",
+        path: "/dashboard/rooms",
+        icon: faDoorOpen,
+      },
+    ],
+  },
 ];
 
 export default menu;

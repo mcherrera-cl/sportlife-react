@@ -1,0 +1,8 @@
+.hi {
+    display:inline-block;
+    width: 1em;
+    height: 1em;
+    background-image:url('https://raw.githubusercontent.com/ABSphreak/ABSphreak/master/gifs/Hi.gif');
+    background-size:cover;background-position:center;
+    background-repeat:no-repeat;
+}

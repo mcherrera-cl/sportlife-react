@@ -1,9 +1,48 @@
 import { Card, Container, Button, Row, Col } from "react-bootstrap";
-import { faLock, faPalette, faRightFromBracket, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLock,
+  faPalette,
+  faRightFromBracket,
+  faCircleInfo,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
+
 import ToggleTheme from "@components/ToggleTheme";
+import { changePasswordForm } from "@utils/formAlerts";
+import { successAlert, confirmAlert } from "@utils/alerts";
+import { logout } from "@services/authStorage";
 
 export default function SettingsPage() {
+
+  const navigate = useNavigate();
+  
+  const handleCambiarPassword = async () => {
+    const { isConfirmed } = await changePasswordForm();
+
+    if (!isConfirmed) return;
+
+    successAlert(
+      "Contraseña actualizada",
+      "Tu contraseña se ha actualizado correctamente.",
+    );
+  };
+
+  const handleCerrarSesion = async () => {
+    const { isConfirmed } = await confirmAlert(
+      "Cerrar sesión",
+      "¿Deseas cerrar tu sesión en este dispositivo?",
+      "Cerrar sesión",
+    );
+
+    if (!isConfirmed) return;
+
+    logout();
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
   return (
     <Container className="py-4">
       <h2 className="mb-4">Configuración</h2>
@@ -42,7 +81,9 @@ export default function SettingsPage() {
                 Cambia tu contraseña para mantener tu cuenta segura.
               </p>
 
-              <Button variant="outline-warning">Cambiar contraseña</Button>
+              <Button variant="outline-warning" onClick={handleCambiarPassword}>
+                Cambiar contraseña
+              </Button>
             </Card.Body>
           </Card>
         </Col>
@@ -62,7 +103,9 @@ export default function SettingsPage() {
                 Cierra tu sesión en este dispositivo.
               </p>
 
-              <Button variant="outline-danger">Cerrar sesión</Button>
+              <Button variant="outline-danger" onClick={handleCerrarSesion}>
+                Cerrar sesión
+              </Button>
             </Card.Body>
           </Card>
         </Col>

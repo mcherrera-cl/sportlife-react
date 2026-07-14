@@ -29,3 +29,12 @@ export function actualizarPerfil(payload) {
       body: JSON.stringify(payload)
     })
 }
+
+export function actualizarPassword(payload) {
+    return request("/auth/me/password", {
+      method: "PUT",
+      requiereAuth: true,
+      body: JSON.stringify(payload)
+    })
+}
+

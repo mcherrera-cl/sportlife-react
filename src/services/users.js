@@ -15,3 +15,17 @@ export function crearUsuario(payload) {
   });
 }
 
+export function updateUser(id, payload) {
+  return request(`/users/${id}`, {
+    method: "PUT",
+    requiereAuth: true,
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteUser(id) {
+  return request(`/users/${id}`, {
+    method: "DELETE",
+    requiereAuth: true
+  })
+}

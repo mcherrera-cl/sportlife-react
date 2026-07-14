@@ -21,4 +21,6 @@ function getAuthHeaders() {
   };
 }
 
+
+
 export { guardarDatos, eliminarToken, obtenerToken, getAuthHeaders };

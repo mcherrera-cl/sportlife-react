@@ -5,7 +5,9 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import ProfilePage from "../pages/dashboard/ProfilePage";
 import ReservationsPage from "../pages/dashboard/reservations/Reservation";
 import SettingsPage from "../pages/dashboard/settings/SettingsPage";
-import UsersPage from "../pages/dashboard/users/UsersPage";
+import UsersPage from "../pages/dashboard/admin/users/UsersPage";
+import RoomsPage from "../pages/dashboard/admin/rooms/RomsPage";
+
 /**
  * @typedef {import("react-router-dom").RouteObject} RouteObject
  */
@@ -21,32 +23,39 @@ const privateRoutes = [
         children: [
           {
             index: true,
-            element:  React.createElement(Dashboard)
+            element: React.createElement(Dashboard),
           },
           {
             path: "profile",
-            element: React.createElement(ProfilePage)
+            element: React.createElement(ProfilePage),
           },
           {
             path: "settings",
-            element: React.createElement(SettingsPage)
+            element: React.createElement(SettingsPage),
           },
           {
             path: "users",
-            element: React.createElement(ProtectedRoute, {roles: ["admin"]}),
+            element: React.createElement(ProtectedRoute, { roles: ["admin"] }),
             children: [
-              {index: true,  element: React.createElement(UsersPage)}
-            ]
+              { index: true, element: React.createElement(UsersPage) },
+            ],
+          },
+          {
+            path: "rooms",
+            element: React.createElement(ProtectedRoute, { roles: ["admin"] }),
+            children: [
+              { index: true, element: React.createElement(RoomsPage) },
+            ],
           },
           {
             path: "reservations",
-            element: React.createElement(ProtectedRoute, {roles: ["user"]}),
+            element: React.createElement(ProtectedRoute, { roles: ["user"] }),
             children: [
-              {index: true, element: React.createElement(ReservationsPage)}
-            ]
-          }
-        ]
-      }
+              { index: true, element: React.createElement(ReservationsPage) },
+            ],
+          },
+        ],
+      },
     ],
   },
 ];

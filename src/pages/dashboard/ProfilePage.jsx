@@ -34,7 +34,7 @@ export default function ProfilePage() {
     birth_date: "",
     metadata: {
       about: "",
-      sport: "",
+      sports: [],
     },
   });
   const [originalForm, setOriginalForm] = useState(null);
@@ -49,7 +49,7 @@ export default function ProfilePage() {
       birth_date: user.birth_date?.split("T")[0] ?? "",
       metadata: {
         about: user.metadata?.about ?? "",
-        sport: user.metadata?.sports?.[0]?.name ?? "",
+        sport: user.metadata?.sports?.[0]?.name ?? [],
       },
     };
 
@@ -71,17 +71,33 @@ export default function ProfilePage() {
     }));
   }
 
-  function handleMetadataChange(event) {
-    const { name, value } = event.target;
+function handleMetadataChange(event) {
+  const { name, value } = event.target;
 
-    setForm((prev) => ({
+  setForm((prev) => {
+    if (name === "sport") {
+      return {
+        ...prev,
+        metadata: {
+          ...prev.metadata,
+          sports: [
+            {
+              name: value,
+            },
+          ],
+        },
+      };
+    }
+
+    return {
       ...prev,
       metadata: {
         ...prev.metadata,
         [name]: value,
       },
-    }));
-  }
+    };
+  });
+}
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -230,7 +246,7 @@ export default function ProfilePage() {
                       <Form.Control
                         type="text"
                         name="sport"
-                        value={form.metadata.sport}
+                        value={form.metadata.sports?.[0]?.name ?? ""}
                         onChange={handleMetadataChange}
                         disabled={!editing}
                       />

@@ -20,8 +20,15 @@ import {
   faSearch,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import { editUserForm } from "../../../../utils/formAlerts";
+import {
+  successAlert,
+  loadingAlert,
+  closeAlert,
+  confirmAlert,
+} from "@utils/alerts";
 
-import { getUsers } from "@services/users";
+import { getUsers, updateUser, deleteUser } from "@services/users";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -80,12 +87,66 @@ export default function UsersPage() {
     }).format(new Date(date));
   }
 
-  function handleEdit(user) {
-    console.log("Editar:", user);
-  }
+  async function handleEdit(user) {
+    const { isConfirmed, value } = await editUserForm(user);
 
-  function handleDelete(id) {
-    console.log("Eliminar:", id);
+    if (!isConfirmed) return;
+
+    try {
+      loadingAlert(
+        "Actualizando usuario...",
+        "Guardando los cambios realizados.",
+      );
+
+      const { ok, data } = await updateUser(user.id, value);
+
+      if (ok) {
+        setUsers((prev) =>
+          prev.map((item) => (item.id === user.id ? data : item)),
+        );
+
+        closeAlert();
+
+        successAlert("Usuario actualizado");
+      }
+    } catch (error) {
+      closeAlert();
+
+      console.error(error);
+    }
+  }
+  async function handleDelete(user) {
+    const { isConfirmed } = await confirmAlert(
+      "¿Eliminar usuario?",
+      `¿Estás seguro de eliminar al usuario ${user.full_name}?`,
+      "Eliminar",
+      "Cancelar",
+      "warning",
+    );
+
+    if (!isConfirmed) return;
+
+    try {
+      loadingAlert("Eliminando usuario...", "Procesando la eliminación.");
+
+      const { ok } = await deleteUser(user.id);
+
+      if (ok) {
+        closeAlert();
+
+        setUsers((prev) => prev.filter((item) => item.id !== user.id));
+
+        successAlert(
+          "Usuario eliminado",
+          `${user.full_name} fue eliminado correctamente.`,
+        );
+      }
+    } catch (error) {
+      closeAlert();
+
+      console.error(error);
+
+    }
   }
 
   if (loading) {
@@ -234,7 +295,7 @@ export default function UsersPage() {
                         variant="outline-danger"
                         size="sm"
                         title="Eliminar"
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => handleDelete(user)}
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </Button>
