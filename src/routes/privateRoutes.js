@@ -7,6 +7,7 @@ import ReservationsPage from "../pages/dashboard/reservations/Reservation";
 import SettingsPage from "../pages/dashboard/settings/SettingsPage";
 import UsersPage from "../pages/dashboard/admin/users/UsersPage";
 import RoomsPage from "../pages/dashboard/admin/rooms/RomsPage";
+import SportsPage from "../pages/dashboard/admin/sports/SportPage";
 
 /**
  * @typedef {import("react-router-dom").RouteObject} RouteObject
@@ -45,6 +46,13 @@ const privateRoutes = [
             element: React.createElement(ProtectedRoute, { roles: ["admin"] }),
             children: [
               { index: true, element: React.createElement(RoomsPage) },
+            ],
+          },
+          {
+            path: "sports",
+            element: React.createElement(ProtectedRoute, { roles: ["admin"] }),
+            children: [
+              { index: true, element: React.createElement(SportsPage) },
             ],
           },
           {

@@ -29,10 +29,12 @@ import {
 } from "@utils/alerts";
 
 import { getUsers, updateUser, deleteUser } from "@services/users";
+import { getSports } from "@services/sports";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [sports, setSports] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -57,8 +59,23 @@ export default function UsersPage() {
     }
   }
 
+  async function loadSports() {
+    try {
+      const { ok, data } = await getSports();
+
+      if (ok) {
+        const activeSports = data.filter((sport) => sport.status);
+
+        setSports(activeSports);
+      }
+    } catch (err) {
+      console.error("Error cargando deportes", err);
+    }
+  }
+
   useEffect(() => {
     loadUsers();
+    loadSports();
   }, []);
 
   useEffect(() => {
@@ -88,7 +105,9 @@ export default function UsersPage() {
   }
 
   async function handleEdit(user) {
-    const { isConfirmed, value } = await editUserForm(user);
+    console.log("Deportes enviados:", sports);
+
+    const { isConfirmed, value } = await editUserForm(user, sports);
 
     if (!isConfirmed) return;
 
@@ -145,7 +164,6 @@ export default function UsersPage() {
       closeAlert();
 
       console.error(error);
-
     }
   }
 

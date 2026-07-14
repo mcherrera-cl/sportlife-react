@@ -6,6 +6,7 @@ import {
   faPlus,
   faUsers,
   faDoorOpen,
+  faDumbbell,
 } from "@fortawesome/free-solid-svg-icons";
 
 const menu = [
@@ -61,6 +62,11 @@ const menu = [
         label: "Salas",
         path: "/dashboard/rooms",
         icon: faDoorOpen,
+      },
+      {
+        label: "Deportes",
+        path: "/dashboard/sports",
+        icon: faDumbbell,
       },
     ],
   },
