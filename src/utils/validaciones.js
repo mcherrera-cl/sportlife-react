@@ -9,7 +9,7 @@ export function validarNombre(valor) {
     .trim()
     .replace(/\s+/g, " ");
 
-  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]{2,}$/;
+  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]{4,}$/;
 
   return regex.test(nombre);
 }
