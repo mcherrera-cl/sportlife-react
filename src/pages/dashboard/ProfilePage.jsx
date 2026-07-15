@@ -12,14 +12,22 @@ import { getUser, updateUser } from "@services/authStorage";
 import { validarEmail, validarNombre } from "@utils/validaciones";
 import { formatoFecha } from "@utils/format";
 import { actualizarPerfil } from "@services/auth";
+import { getSports } from "@services/sports";
+
 import { useAuth } from "@context/AuthContext";
 import { successAlert } from "@utils/alerts";
-import { faEnvelope, faCalendar, faCalendarPlus, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faCalendar,
+  faCalendarPlus,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ProfilePage() {
   const user = getUser();
   const { setUser } = useAuth();
+  const [sports, setSports] = useState([]);
 
   const roleVariant =
     {
@@ -34,27 +42,46 @@ export default function ProfilePage() {
     birth_date: "",
     metadata: {
       about: "",
-      sports: [],
+      sport: "",
     },
   });
   const [originalForm, setOriginalForm] = useState(null);
   const [editing, setEditing] = useState(false);
 
+  async function loadSports() {
+    try {
+      const { ok, data } = await getSports();
+
+      if (!ok) return;
+
+      const activeSports = data.filter((sport) => sport.status);
+
+      setSports(activeSports);
+
+      const currentSport = activeSports.find(
+        (sport) => sport.name === user.metadata?.sports?.[0]?.name,
+      );
+
+      const profile = {
+        full_name: user.full_name ?? "",
+        email: user.email ?? "",
+        birth_date: user.birth_date?.split("T")[0] ?? "",
+        metadata: {
+          about: user.metadata?.about ?? "",
+          sport: currentSport?.id ?? "",
+        },
+      };
+
+      setForm(profile);
+      setOriginalForm(structuredClone(profile));
+    } catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
     if (!user) return;
 
-    const data = {
-      full_name: user.full_name ?? "",
-      email: user.email ?? "",
-      birth_date: user.birth_date?.split("T")[0] ?? "",
-      metadata: {
-        about: user.metadata?.about ?? "",
-        sport: user.metadata?.sports?.[0]?.name ?? [],
-      },
-    };
-
-    setForm(data);
-    setOriginalForm(data);
+    loadSports();
   }, []);
 
   const nombreValido = validarNombre(form.full_name);
@@ -71,48 +98,58 @@ export default function ProfilePage() {
     }));
   }
 
-function handleMetadataChange(event) {
-  const { name, value } = event.target;
+  function handleMetadataChange(event) {
+    const { name, value } = event.target;
 
-  setForm((prev) => {
-    if (name === "sport") {
-      return {
-        ...prev,
-        metadata: {
-          ...prev.metadata,
-          sports: [
-            {
-              name: value,
-            },
-          ],
-        },
-      };
-    }
-
-    return {
+    setForm((prev) => ({
       ...prev,
       metadata: {
         ...prev.metadata,
         [name]: value,
       },
-    };
-  });
-}
+    }));
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
 
+    const selectedSport = sports.find(
+      (sport) => Number(sport.id) === Number(form.metadata.sport),
+    );
+
+    const payload = {
+      ...form,
+      metadata: {
+        about: form.metadata.about,
+        sports: selectedSport
+          ? [
+              {
+                name: selectedSport.name,
+                frequency_per_week:
+                  user.metadata?.sports?.[0]?.frequency_per_week ?? 2,
+              },
+            ]
+          : [],
+      },
+    };
+
     try {
-      const { ok, data } = await actualizarPerfil(form);
+      console.log("Sport seleccionado:", form.metadata.sport);
+      console.log("Lista deportes:", sports);
+      console.log("selectedSport:", selectedSport);
+      console.log("payload:", payload);
+      const { ok, data } = await actualizarPerfil(payload);
+
       if (ok) {
         updateUser(data);
         setUser(data);
+
         setOriginalForm(structuredClone(form));
         setEditing(false);
 
-        successAlert("Usuario Actualizado");
+        successAlert("Usuario actualizado");
       }
     } catch (error) {
-      // setErrorLogin(error.message || "Datos incorrectos");
       console.error(error);
     }
   }
@@ -125,7 +162,10 @@ function handleMetadataChange(event) {
   return (
     <Container>
       <div className="d-flex align-items-center mb-4">
-        <FontAwesomeIcon icon={faUserCircle} className={`text-${roleVariant} display-1`} />
+        <FontAwesomeIcon
+          icon={faUserCircle}
+          className={`text-${roleVariant} display-1`}
+        />
         <div className="d-flex flex-column justify-content-start">
           <h2 className="fs-1"> Mi perfil</h2>
           <p className="text-muted fs-5">Gestiona tu información personal</p>
@@ -243,13 +283,20 @@ function handleMetadataChange(event) {
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>Deporte favorito</Form.Label>
-                      <Form.Control
-                        type="text"
+                      <Form.Select
                         name="sport"
-                        value={form.metadata.sports?.[0]?.name ?? ""}
+                        value={form.metadata.sport}
                         onChange={handleMetadataChange}
                         disabled={!editing}
-                      />
+                      >
+                        <option value="">Seleccione un deporte</option>
+
+                        {sports.map((sport) => (
+                          <option key={sport.id} value={sport.id}>
+                            {sport.name}
+                          </option>
+                        ))}
+                      </Form.Select>
                     </Form.Group>
                   </Col>
 
@@ -281,7 +328,11 @@ function handleMetadataChange(event) {
                           Cancelar
                         </Button>
 
-                        <Button type="submit" variant={roleVariant} disabled={!isValid}>
+                        <Button
+                          type="submit"
+                          variant={roleVariant}
+                          disabled={!isValid}
+                        >
                           Guardar cambios
                         </Button>
                       </div>

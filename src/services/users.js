@@ -7,7 +7,7 @@ export function getUsers() {
   })
 }
 
-export function crearUsuario(payload) {
+export function createUser(payload) {
   return request("/users", {
     method: "POST",
     requiereAuth: true,

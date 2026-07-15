@@ -1,6 +1,224 @@
 import Swal from "sweetalert2";
 import { actualizarPassword } from "@services/auth";
-import { validarEmail, validarNombre } from "./validaciones";
+import { validarEmail, validarNombre, validarLongitudPassword } from "./validaciones";
+
+export async function createUserForm(sports = []) {
+  return Swal.fire({
+    title: "Nuevo usuario",
+    width: 600,
+
+    html: /*html*/ `
+      <div class="text-start">
+
+        <div class="mb-3">
+          <label for="full_name" class="form-label">
+            Nombre completo
+          </label>
+
+          <input
+            id="full_name"
+            type="text"
+            class="form-control"
+          />
+
+          <div class="invalid-feedback">
+            Ingrese un nombre válido.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">
+            Correo electrónico
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+          />
+
+          <div class="invalid-feedback">
+            Ingrese un correo válido.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">
+            Contraseña
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+          />
+          <div class="invalid-feedback">
+            La contraseña debe tener al menos 8 caracteres para ser válida.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="role" class="form-label">
+            Rol
+          </label>
+
+          <select id="role" class="form-select">
+            <option value="user" selected>
+              Usuario
+            </option>
+
+            <option value="coach">
+              Coach
+            </option>
+
+            <option value="admin">
+              Administrador
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="favorite_sport" class="form-label">
+            Deporte favorito
+          </label>
+
+          <select id="favorite_sport" class="form-select">
+
+            <option value="">
+              Seleccione un deporte
+            </option>
+
+            ${sports
+              .map(
+                (sport) => `
+                  <option value="${sport.id}">
+                    ${sport.name}
+                  </option>
+                `,
+              )
+              .join("")}
+
+          </select>
+        </div>
+
+      </div>
+    `,
+
+    showCancelButton: true,
+
+    confirmButtonText: "Crear usuario",
+    cancelButtonText: "Cancelar",
+
+    reverseButtons: true,
+
+    buttonsStyling: false,
+
+    customClass: {
+      popup: "swal-bootstrap shadow",
+      title: "mb-3",
+      htmlContainer: "mt-2",
+      actions: "mt-4",
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-outline-secondary me-2",
+      validationMessage: "text-danger mt-3 text-start",
+    },
+
+    focusConfirm: false,
+
+    didOpen: () => {
+      const fullnameInput = document.getElementById("full_name");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+
+      fullnameInput.addEventListener("input", () => {
+        const valido = validarNombre(fullnameInput.value);
+
+        if (fullnameInput.value === "") {
+          fullnameInput.classList.remove("is-valid", "is-invalid");
+          return;
+        }
+
+        fullnameInput.classList.toggle("is-valid", valido);
+        fullnameInput.classList.toggle("is-invalid", !valido);
+      });
+
+      emailInput.addEventListener("input", () => {
+        const valido = validarEmail(emailInput.value);
+
+        if (emailInput.value === "") {
+          emailInput.classList.remove("is-valid", "is-invalid");
+          return;
+        }
+
+        emailInput.classList.toggle("is-valid", valido);
+        emailInput.classList.toggle("is-invalid", !valido);
+      });
+
+      passwordInput.addEventListener("input", () => {
+        const valido = validarLongitudPassword(passwordInput.value);
+
+        if (passwordInput.value === "") {
+          passwordInput.classList.remove("is-valid", "is-invalid");
+          return;
+        }
+
+        passwordInput.classList.toggle("is-valid", valido);
+        passwordInput.classList.toggle("is-invalid", !valido);
+      });
+    },
+
+    preConfirm: () => {
+      const full_name = document.getElementById("full_name").value.trim();
+
+      const email = document.getElementById("email").value.trim();
+
+      const password = document.getElementById("password").value.trim();
+
+      const role = document.getElementById("role").value;
+
+      const sportId = document.getElementById("favorite_sport").value;
+
+      const selectedSport = sports.find(
+        (sport) => sport.id == sportId,
+      );
+
+      if (!validarNombre(full_name)) {
+        Swal.showValidationMessage("Ingrese un nombre válido.");
+        return false;
+      }
+
+      if (!validarEmail(email)) {
+        Swal.showValidationMessage("Ingrese un correo válido.");
+        return false;
+      }
+
+      if (password.length < 8) {
+        Swal.showValidationMessage(
+          "La contraseña debe tener al menos 8 caracteres.",
+        );
+        return false;
+      }
+
+      return {
+        full_name,
+        email,
+        password,
+        role,
+
+        metadata: {
+          sports: selectedSport
+            ? [
+                {
+                  name: selectedSport.name,
+                  frequency_per_week: 0,
+                },
+              ]
+            : [],
+        },
+      };
+    },
+  });
+}
 
 export async function createSportForm() {
   return Swal.fire({

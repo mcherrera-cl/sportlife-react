@@ -16,6 +16,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
+  loadingAlert,
+  closeAlert,
+  successAlert,
+} from "@utils/alerts";
+
+import {
   faDoorOpen,
   faPen,
   faTrash,
@@ -26,7 +32,10 @@ import {
 import {
   getRooms,
   deleteRoom,
+  createRoom
 } from "@services/rooms";
+
+import { createRoomForm } from "@utils/formRoomsAlert";
 
 export default function RoomsPage() {
   const [rooms, setRooms] = useState([]);
@@ -54,6 +63,32 @@ export default function RoomsPage() {
       setLoading(false);
     }
   }
+
+  async function handleCreate() {
+  const { isConfirmed, value } = await createRoomForm();
+
+  if (!isConfirmed) return;
+
+  try {
+    loadingAlert("Creando sala...", "Registrando la nueva sala.");
+
+    const { ok, data } = await createRoom(value);
+
+    if (ok) {
+      setRooms((prev) => [...prev, data]);
+
+      closeAlert();
+
+      successAlert(
+        "Sala creada",
+        "La sala fue registrada correctamente."
+      );
+    }
+  } catch (error) {
+    closeAlert();
+    console.error(error);
+  }
+}
 
   useEffect(() => {
     loadRooms();
@@ -144,45 +179,29 @@ export default function RoomsPage() {
 
             <Col md={3} className="text-end">
 
-              <Button variant="danger">
+              <Button variant="danger" onClick={handleCreate}>
 
                 <FontAwesomeIcon
                   icon={faPlus}
                   className="me-2"
                 />
-
                 Nueva sala
-
               </Button>
-
             </Col>
-
           </Row>
-
           <Table hover responsive className="align-middle">
-
             <thead>
-
               <tr>
-
                 <th>Nombre</th>
-
                 <th>Capacidad</th>
-
                 <th>Ubicación</th>
-
                 <th>Estado</th>
-
                 <th className="text-center">
                   Acciones
                 </th>
-
               </tr>
-
             </thead>
-
             <tbody>
-
               {filteredRooms.map((room) => (
 
                 <tr key={room.id}>

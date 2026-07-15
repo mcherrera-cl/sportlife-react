@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "clinyong.vscode-css-modules",
-    "dsznajder.es7-react-js-snippets"
+    "dsznajder.es7-react-js-snippets",
+    "Tobermory.es6-string-html"
   ]
 }

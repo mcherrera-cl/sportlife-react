@@ -18,9 +18,10 @@ import {
   faPen,
   faTrash,
   faSearch,
+  faPlus,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import { editUserForm } from "../../../../utils/formAlerts";
+import { createUserForm, editUserForm } from "../../../../utils/formAlerts";
 import {
   successAlert,
   loadingAlert,
@@ -28,13 +29,16 @@ import {
   confirmAlert,
 } from "@utils/alerts";
 
-import { getUsers, updateUser, deleteUser } from "@services/users";
+import { createUser, getUsers, updateUser, deleteUser } from "@services/users";
 import { getSports } from "@services/sports";
+
+import { useAuth } from "@context/AuthContext";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [sports, setSports] = useState([]);
+  const { user: currentUser } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -42,22 +46,28 @@ export default function UsersPage() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
 
-  async function loadUsers() {
-    try {
-      setLoading(true);
+async function loadUsers() {
+  try {
+    setLoading(true);
 
-      const { ok, data } = await getUsers();
+    const { ok, data } = await getUsers();
 
-      if (ok) {
-        setUsers(data);
-        setFilteredUsers(data);
-      }
-    } catch (err) {
-      setError(err.message || "Error cargando usuarios");
-    } finally {
-      setLoading(false);
+    if (ok) {
+      const filtered = data.filter(
+        (user) => user.id !== currentUser?.id
+      );
+
+      setUsers(data);
+      setFilteredUsers(filtered);
     }
+
+  } catch (err) {
+    setError(err.message || "Error cargando usuarios");
+
+  } finally {
+    setLoading(false);
   }
+}
 
   async function loadSports() {
     try {
@@ -73,13 +83,15 @@ export default function UsersPage() {
     }
   }
 
-  useEffect(() => {
+useEffect(() => {
+  if (currentUser) {
     loadUsers();
     loadSports();
-  }, []);
+  }
+}, [currentUser]);
 
   useEffect(() => {
-    let result = users;
+    let result = users.filter((user) => user.id !== currentUser?.id);
 
     if (search.trim()) {
       result = result.filter(
@@ -94,7 +106,7 @@ export default function UsersPage() {
     }
 
     setFilteredUsers(result);
-  }, [search, roleFilter, users]);
+  }, [users, search, roleFilter, currentUser]);
 
   function formatDate(date) {
     return new Intl.DateTimeFormat("es-CL", {
@@ -102,6 +114,33 @@ export default function UsersPage() {
       month: "2-digit",
       year: "numeric",
     }).format(new Date(date));
+  }
+
+  async function handleCreate() {
+    const { isConfirmed, value } = await createUserForm(sports);
+
+    if (!isConfirmed) return;
+
+    try {
+      loadingAlert("Creando usuario...", "Registrando el nuevo usuario.");
+
+      const { ok, data } = await createUser(value);
+
+      if (ok) {
+        setUsers((prev) => [...prev, data]);
+
+        closeAlert();
+
+        successAlert(
+          "Usuario creado",
+          "El usuario fue registrado correctamente.",
+        );
+      }
+    } catch (error) {
+      closeAlert();
+
+      console.error(error);
+    }
   }
 
   async function handleEdit(user) {
@@ -123,9 +162,7 @@ export default function UsersPage() {
         setUsers((prev) =>
           prev.map((item) => (item.id === user.id ? data : item)),
         );
-
         closeAlert();
-
         successAlert("Usuario actualizado");
       }
     } catch (error) {
@@ -230,44 +267,39 @@ export default function UsersPage() {
                 onChange={(e) => setRoleFilter(e.target.value)}
               >
                 <option value="all">Todos los roles</option>
-
                 <option value="user">Usuarios</option>
-
                 <option value="coach">Coaches</option>
-
                 <option value="admin">Administradores</option>
               </Form.Select>
             </Col>
           </Row>
-
+          <Button
+            variant="danger"
+            className="mb-3 d-block ms-auto"
+            onClick={handleCreate}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Nuevo usuario
+          </Button>
           <Table responsive hover className="align-middle">
             <thead>
               <tr>
                 <th>Nombre</th>
-
                 <th>Email</th>
-
                 <th>Rol</th>
-
                 <th>Deporte</th>
-
                 <th>Registro</th>
-
                 <th>Estado</th>
-
                 <th className="text-center">Acciones</th>
               </tr>
             </thead>
-
             <tbody>
               {filteredUsers.map((user) => (
                 <tr key={user.id}>
                   <td>
                     <strong>{user.full_name}</strong>
                   </td>
-
                   <td>{user.email}</td>
-
                   <td>
                     <Badge
                       bg={

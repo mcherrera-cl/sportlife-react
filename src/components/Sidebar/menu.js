@@ -1,3 +1,5 @@
+import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import {
   faHouse,
   faUser,
@@ -7,6 +9,8 @@ import {
   faUsers,
   faDoorOpen,
   faDumbbell,
+  faLink,
+  faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
 
 const menu = [
@@ -41,11 +45,11 @@ const menu = [
         path: "/dashboard/reservations",
         icon: faCalendarCheck,
       },
-      {
-        label: "Nueva Reserva",
-        path: "/dashboard/reservations/new",
-        icon: faPlus,
-      },
+    {
+      label: "Historial",
+      path: "/dashboard/reservations/history",
+      icon: faClockRotateLeft,
+    },
     ],
   },
 
@@ -67,6 +71,16 @@ const menu = [
         label: "Deportes",
         path: "/dashboard/sports",
         icon: faDumbbell,
+      },
+      {
+        label: "Asignaciones",
+        path: "/dashboard/sport-rooms",
+        icon: faLink,
+      },
+      {
+        label: "Horarios",
+        path: "/dashboard/schedules",
+        icon: faCalendarDays,
       },
     ],
   },
