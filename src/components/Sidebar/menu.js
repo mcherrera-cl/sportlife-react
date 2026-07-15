@@ -10,6 +10,7 @@ import {
   faDoorOpen,
   faDumbbell,
   faLink,
+  faCalendarPlus,
   faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -45,14 +46,38 @@ const menu = [
         path: "/dashboard/reservations",
         icon: faCalendarCheck,
       },
-    {
-      label: "Historial",
-      path: "/dashboard/reservations/history",
-      icon: faClockRotateLeft,
-    },
+      {
+        label: "Historial",
+        path: "/dashboard/reservations-history",
+        icon: faClockRotateLeft,
+      },
+      {
+        label: "Clases disponibles",
+        path: "/dashboard/classes",
+        icon: faCalendarPlus,
+      },
     ],
   },
 
+  // COACH
+  {
+    title: "Actividades",
+    roles: ["COACH"],
+    items: [
+      {
+        label: "Mis Clases",
+        path: "/dashboard/my-classes",
+        icon: faDumbbell,
+      },
+      {
+        label: "Mi Horario",
+        path: "/dashboard/my-schedule",
+        icon: faCalendarDays,
+      },
+    ]
+  },
+
+  // ADMIN
   {
     title: "Gestión",
     roles: ["ADMIN"],

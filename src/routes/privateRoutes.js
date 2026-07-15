@@ -10,6 +10,10 @@ import RoomsPage from "../pages/dashboard/admin/rooms/RomsPage";
 import SportsPage from "../pages/dashboard/admin/sports/SportPage";
 import SportRoomsPage from "../pages/dashboard/admin/sportrooms/SportRoomsPage";
 import ClassSchedulesPage from "../pages/dashboard/admin/class-schedules/ClassSchedulesPage";
+import ReservationHistory from "../pages/dashboard/user/reservations/History";
+import AvailableClasses from "../pages/dashboard/user/available-classes/AvailableClasses";
+import MyClasses from "../pages/dashboard/coach/activities/MyClasses";
+import MySchedule from "../pages/dashboard/coach/activities/MySchedule";
 
 /**
  * @typedef {import("react-router-dom").RouteObject} RouteObject
@@ -78,6 +82,34 @@ const privateRoutes = [
               { index: true, element: React.createElement(ReservationsPage) },
             ],
           },
+          {
+            path: "reservations-history",
+            element: React.createElement(ProtectedRoute, { roles: ["user"] }),
+            children: [
+              { index: true, element: React.createElement(ReservationHistory) },
+            ],
+          },
+          {
+            path: "classes",
+            element: React.createElement(ProtectedRoute, { roles: ["user"] }),
+            children: [
+              { index: true, element: React.createElement(AvailableClasses) },
+            ],
+          },
+          {
+            path: "my-classes",
+            element: React.createElement(ProtectedRoute, { roles: ["coach"] }),
+            children: [
+              { index: true, element: React.createElement(MyClasses) },
+            ],
+          },
+         {
+            path: "my-schedule",
+            element: React.createElement(ProtectedRoute, { roles: ["coach"] }),
+            children: [
+              { index: true, element: React.createElement(MySchedule) },
+            ],
+          },              
         ],
       },
     ],

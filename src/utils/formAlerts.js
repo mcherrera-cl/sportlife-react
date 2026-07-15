@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { actualizarPassword } from "@services/auth";
-import { validarEmail, validarNombre, validarLongitudPassword } from "./validaciones";
+import { validarEmail, validarNombre, validarLongitudPassword, validarFechaNacimiento } from "./validaciones";
 
 export async function createUserForm(sports = []) {
   return Swal.fire({
@@ -39,6 +39,21 @@ export async function createUserForm(sports = []) {
 
           <div class="invalid-feedback">
             Ingrese un correo válido.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="birth_date" class="form-label">
+            Fecha de nacimiento
+          </label>
+
+          <input
+            id="birth_date"
+            type="date"
+            class="form-control"
+          />
+
+          <div class="invalid-feedback">
+            La fecha debe corresponder a una edad entre 10 y 100 años.
           </div>
         </div>
 
@@ -89,14 +104,14 @@ export async function createUserForm(sports = []) {
             </option>
 
             ${sports
-              .map(
-                (sport) => `
+        .map(
+          (sport) => `
                   <option value="${sport.id}">
                     ${sport.name}
                   </option>
                 `,
-              )
-              .join("")}
+        )
+        .join("")}
 
           </select>
         </div>
@@ -129,6 +144,7 @@ export async function createUserForm(sports = []) {
       const fullnameInput = document.getElementById("full_name");
       const emailInput = document.getElementById("email");
       const passwordInput = document.getElementById("password");
+      const birthDateInput = document.getElementById("birth_date");
 
       fullnameInput.addEventListener("input", () => {
         const valido = validarNombre(fullnameInput.value);
@@ -154,6 +170,30 @@ export async function createUserForm(sports = []) {
         emailInput.classList.toggle("is-invalid", !valido);
       });
 
+      birthDateInput.addEventListener("input", () => {
+        const valido = validarFechaNacimiento(
+          birthDateInput.value,
+        );
+
+        if (birthDateInput.value === "") {
+          birthDateInput.classList.remove(
+            "is-valid",
+            "is-invalid",
+          );
+          return;
+        }
+
+        birthDateInput.classList.toggle(
+          "is-valid",
+          valido,
+        );
+
+        birthDateInput.classList.toggle(
+          "is-invalid",
+          !valido,
+        );
+      });
+
       passwordInput.addEventListener("input", () => {
         const valido = validarLongitudPassword(passwordInput.value);
 
@@ -165,6 +205,7 @@ export async function createUserForm(sports = []) {
         passwordInput.classList.toggle("is-valid", valido);
         passwordInput.classList.toggle("is-invalid", !valido);
       });
+
     },
 
     preConfirm: () => {
@@ -177,6 +218,9 @@ export async function createUserForm(sports = []) {
       const role = document.getElementById("role").value;
 
       const sportId = document.getElementById("favorite_sport").value;
+
+      const birth_date =
+        document.getElementById("birth_date").value;
 
       const selectedSport = sports.find(
         (sport) => sport.id == sportId,
@@ -199,20 +243,28 @@ export async function createUserForm(sports = []) {
         return false;
       }
 
+      if (!validarFechaNacimiento(birth_date)) {
+        Swal.showValidationMessage(
+          "La fecha de nacimiento no es válida.",
+        );
+
+        return false;
+      }
+
       return {
         full_name,
         email,
         password,
         role,
-
+        birth_date,
         metadata: {
           sports: selectedSport
             ? [
-                {
-                  name: selectedSport.name,
-                  frequency_per_week: 0,
-                },
-              ]
+              {
+                name: selectedSport.name,
+                frequency_per_week: 0,
+              },
+            ]
             : [],
         },
       };
@@ -557,8 +609,8 @@ export async function editUserForm(user, sports = []) {
     </option>
 
     ${sports
-      .map(
-        (sport) => `
+        .map(
+          (sport) => `
       <option 
         value="${sport.id}"
         ${user.metadata?.sports?.[0]?.id === sport.id ? "selected" : ""}
@@ -566,8 +618,8 @@ export async function editUserForm(user, sports = []) {
         ${sport.name}
       </option>
     `,
-      )
-      .join("")}
+        )
+        .join("")}
 
   </select>
 
@@ -662,12 +714,12 @@ export async function editUserForm(user, sports = []) {
 
           sports: selectedSport
             ? [
-                {
-                  name: selectedSport.name,
-                  frequency_per_week:
-                    user.metadata?.sports?.[0]?.frequency_per_week ?? 0,
-                },
-              ]
+              {
+                name: selectedSport.name,
+                frequency_per_week:
+                  user.metadata?.sports?.[0]?.frequency_per_week ?? 0,
+              },
+            ]
             : [],
         },
       };
@@ -733,15 +785,13 @@ export async function editSportForm(sport) {
 
           <select id="status" class="form-select">
 
-            <option value="true" ${
-              sport.status ? "selected" : ""
-            }>
+            <option value="true" ${sport.status ? "selected" : ""
+      }>
               Activo
             </option>
 
-            <option value="false" ${
-              !sport.status ? "selected" : ""
-            }>
+            <option value="false" ${!sport.status ? "selected" : ""
+      }>
               Inactivo
             </option>
 
